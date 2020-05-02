@@ -1,0 +1,24 @@
+<aside class='main-sidebar sidebar-dark-primary elevation-4'>
+  <!-- Logo -->
+  <%= link_to root_path, class: 'brand-link' do %>
+    <span class='brand-text'><b>Url Shortener</b></span>
+  <% end %>
+
+  <!-- Sidebar -->
+  <div class='slimScrollDiv' style='position: relative; overflow: hidden; width: auto; height: 652px;'>
+    <div class='sidebar' style='min-height: 652px; overflow: hidden; width: auto; height: 652px;'>
+      <!-- Sidebar user panel -->
+      <div class='user-panel mt-3 pb-3 mb-3 d-flex'>
+        <div class='image'>
+          <%= image_tag 'avator.png', class: 'img-circle elevation-2' %>
+        </div>
+        <div class='info'>
+          <a href='#' class='d-block'>Hello!</a>
+        </div>
+      </div>
+      
+      <%= render 'layouts/sidebar_menu' %>
+    </div>
+  </div>
+  <!-- /.sidebar -->
+</aside>
