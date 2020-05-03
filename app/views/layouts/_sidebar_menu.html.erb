@@ -2,21 +2,12 @@
   <nav class='mt-2'>
     <ul class='nav nav-flat nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>
       <li class='nav-item has-treeview menu-open'>
-        <a href='#' class='nav-link'>
-          <%= fa_icon 'lock', class: 'nav-icon' %>
+        <%= link_to root_path, class: 'nav-link' do %>
+          <%= fa_icon 'thumb-tack', class: 'nav-icon' %>
           <p>
-            <%= t('.home') %>
-            <%= fa_icon 'angle-down', class: 'right' %> 
+            <%= t('.generate!') %>
           </p>
-        </a>
-        <ul class='nav nav-treeview'>
-          <li class='nav-item'>
-            <%= link_to '', class: 'nav-link' do %>
-              <%= fa_icon 'arrow-circle-o-right', class: 'nav-icon' %> 
-              <p><%= t('.home') %></p>
-            <% end %>
-          </li>
-        </ul>
+        <% end %>
       </li>
     </ul>
   </nav>

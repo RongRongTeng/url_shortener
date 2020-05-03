@@ -1,0 +1,23 @@
+<%= render 'shared/page_header', header: t('.url_shortener') %>
+
+<section class='content-body'>
+  <div class='card card-outline card-info'>
+    <div class='card-body'>
+      <%= simple_form_for @form, method: :get, url: root_path do |f| %>
+        <%= f.input :original_url, as: :url %>
+        <%= f.input :custom_path, placeholder: 'Optional' %>
+        <%= f.submit 'Generate!', class: 'btn btn-default btn-sm float-right' %>
+      <% end %>
+    </div>
+
+    <div class='card-footer'>
+      <% if @form.short_path %>
+        <h5>Short Url</h5>
+        <%= link_to to_short_url(@form.short_path), link_path(@form.short_path), id: 'short_url', target: :_blank %>
+        <%= button_tag 'Copy!', class: 'has-copied-tooltip btn btn-outline-info btn-sm', data: { target: 'short_url' } %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%= render 'shared/page_footer', header: t('.url_shortener') %>
