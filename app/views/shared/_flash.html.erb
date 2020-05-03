@@ -1,0 +1,5 @@
+<div class='top-flash-message'>
+  <% { error: 'danger', notice: 'info', warning: 'warning' }.each do |type, class_style| %>
+    <%= content_tag(:div, flash[type], class: "alert alert-#{class_style}") if flash[type] %>
+  <% end %>
+</div>

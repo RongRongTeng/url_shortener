@@ -1,0 +1,83 @@
+version: 2.1
+commands:
+  install_deps:
+    steps:
+      - restore_cache:
+          keys:
+            - url_shortener-{{ checksum "Gemfile.lock" }}
+            - url_shortener-
+
+      - run:
+          name: bundle install
+          command:
+            bundle install --path vendor/bundle
+
+      - save_cache:
+          key: url_shortener-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - restore_cache:
+          keys:
+            - url_shortener-{{ checksum "yarn.lock" }}
+            - url_shortener-
+
+      - run:
+          name: yarn install
+          command: yarn install --cache-folder ~/.cache/yarn
+
+      - save_cache:
+          key: url_shortener-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+  default_steps:
+    steps:
+      - checkout
+      - install_deps
+
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.6.3-node-browsers
+        environment:
+          - RAILS_ENV: test
+          - DATABASE_USERNAME: root
+          - DATABASE_HOST: 127.0.0.1
+          - DNS_HOST: 'http://localhost:3000/'
+      - image: circleci/postgres:9.6.5-alpine-ram
+    working_directory: ~/repo
+    steps:
+      - default_steps
+      - run:
+          name: wait for db
+          command: dockerize -wait tcp://127.0.0.1:5432 -timeout 1m
+      - run: bundle exec rake db:create
+      - run: bundle exec rake db:migrate
+      - run:
+          name: run tests
+          command: bundle exec rspec
+
+  rubocop:
+    docker:
+      - image: circleci/ruby:2.6.3-node-browsers
+        environment:
+          REVIEWDOG_VERSION: 0.9.11
+    working_directory: ~/repo
+    steps:
+      - default_steps
+      - run:
+          name: install reviewdog
+          command:
+            curl -fSL https://github.com/reviewdog/reviewdog/releases/download/$REVIEWDOG_VERSION/reviewdog_linux_amd64 -o reviewdog && chmod +x ./reviewdog
+      - run: bundle exec rubocop --fail-level E | tee /dev/stderr | ./reviewdog -f=rubocop -reporter=github-pr-review
+
+workflows:
+  build_and_rubocop:
+    jobs:
+      - build
+      - rubocop:
+          filters:
+            branches:
+              ignore:
+                - master

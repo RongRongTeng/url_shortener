@@ -1,0 +1,25 @@
+AllCops:
+  Exclude:
+    - 'bin/*'
+    - 'db/schema.rb'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+  NewCops: disable
+# Commonly used screens these days easily fit more than 80 characters.
+Layout/LineLength:
+  Max: 120
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'spec/**/*'
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/**/*'
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/**/*'
+    - 'lib/tasks/*.rake'
+Style/Documentation:
+  Enabled: false
+Style/AsciiComments:
+  Enabled: false
